@@ -70,9 +70,9 @@ class NeuroMap:
         
         # Basic project info
         info_lines = [
-            f"\n**Языки:** {', '.join(self.project_info.language_stats.keys())}",
-            f"**Всего файлов:** {self.project_info.total_files}",
-            f"**Кодовых строк:** {self.project_info.total_lines}",
+            f"\n**Languages:** {', '.join(self.project_info.language_stats.keys())}",
+            f"**Total files:** {self.project_info.total_files}",
+            f"**Code lines:** {self.project_info.total_lines}",
         ]
         
         for line in info_lines:
@@ -125,13 +125,13 @@ class NeuroMap:
         
         # Header with structure
         parts.append(f"# {self.project_info.name}")
-        parts.append(f"\n**Парадигма:** {self.patterns.get('paradigm', 'Не определена')}")
-        parts.append(f"**Архитектура:** {', '.join(self.patterns.get('architecture', []))}")
+        parts.append(f"\n**Paradigm:** {self.patterns.get('paradigm', 'Not defined')}")
+        parts.append(f"**Architecture:** {', '.join(self.patterns.get('architecture', []))}")
         token_count += len(encoding.encode(f"# {self.project_info.name}\n"))
         
         # Detailed file information
         if self.project_info.source_files:
-            parts.append("\n## Файлы")
+            parts.append("\n## Files")
             parts.append("```")
             parts.append(self._generate_tree_view())
             parts.append("```")
@@ -141,11 +141,11 @@ class NeuroMap:
             parts.append("\n## Entry Points")
             for ep in self.entrypoints:
                 ep_block = f"\n### {ep['path']}\n"
-                ep_block += f"**Тип:** {ep['type']}\n"
-                ep_block += f"**Язык:** {ep['language']}\n"
-                ep_block += f"**Уверенность:** {ep['confidence']:.1%}\n"
-                ep_block += f"**Описание:** {ep['description']}\n"
-                ep_block += f"**Подписи:** {ep['signature']}\n"
+                ep_block += f"**Type:** {ep['type']}\n"
+                ep_block += f"**Language:** {ep['language']}\n"
+                ep_block += f"**Confidence:** {ep['confidence']:.1%}\n"
+                ep_block += f"**Description:** {ep['description']}\n"
+                ep_block += f"**Signature:** {ep['signature']}\n"
                 
                 if token_count + len(encoding.encode(ep_block)) <= max_tokens - 200:
                     parts.append(ep_block)
@@ -153,9 +153,9 @@ class NeuroMap:
         
         # Symbol index
         if self.symbols:
-            parts.append("\n## Индекс символов")
-            parts.append("\n| Символ | Файл | Тип | Уверенность |")
-            parts.append("|--------|------|-----|-------------|")
+            parts.append("\n## Symbol Index")
+            parts.append("\n| Symbol | File | Type | Confidence |")
+            parts.append("|--------|------|------|------------|")
             
             for sym in sorted(self.symbols, key=lambda x: x.confidence, reverse=True)[:20]:
                 sym_line = f"| {sym.name} | {sym.file} | {sym.type} | {sym.confidence:.1%} |"
@@ -165,14 +165,14 @@ class NeuroMap:
         
         # Dependency graph
         if self.dependencies:
-            parts.append("\n## Зависимости")
+            parts.append("\n## Dependencies")
             dep_groups = {}
             for dep in self.dependencies:
                 if dep.type not in dep_groups:
                     dep_groups[dep.type] = []
                 dep_groups[dep.type].append((dep.source, dep.target))
             
-            parts.append("\n### Граф зависимостей")
+            parts.append("\n### Dependency Graph")
             parts.append("```mermaid")
             parts.append("graph TD")
             for dep_type, deps in dep_groups.items():
@@ -192,37 +192,37 @@ class NeuroMap:
         token_count = 0
         
         # Full project documentation
-        parts.append(f"# Полная документация проекта: {self.project_info.name}")
-        parts.append(f"\n**Размер:** {self.project_info.total_files} файлов, {self.project_info.total_lines} строк кода")
-        parts.append(f"**Языки:** {', '.join(self.project_info.language_stats.keys())}")
+        parts.append(f"# Full Project Documentation: {self.project_info.name}")
+        parts.append(f"\n**Size:** {self.project_info.total_files} files, {self.project_info.total_lines} lines of code")
+        parts.append(f"**Languages:** {', '.join(self.project_info.language_stats.keys())}")
         
         # Architecture analysis
         if self.patterns:
-            parts.append("\n## Архитектурный анализ")
+            parts.append("\n## Architecture Analysis")
             if "architecture" in self.patterns:
-                parts.append(f"**Архитектурные паттерны:** {', '.join(self.patterns['architecture'])}")
+                parts.append(f"**Architecture Patterns:** {', '.join(self.patterns['architecture'])}")
             if "paradigm" in self.patterns:
-                parts.append(f"**Парадигма:** {self.patterns['paradigm']}")
+                parts.append(f"**Paradigm:** {self.patterns['paradigm']}")
             if "frameworks" in self.patterns:
-                parts.append(f"**Фреймворки:** {', '.join(self.patterns['frameworks'])}")
+                parts.append(f"**Frameworks:** {', '.join(self.patterns['frameworks'])}")
         
         # Complete file tree with annotations
-        parts.append("\n## Структура файлов")
+        parts.append("\n## File Structure")
         parts.append("```")
         parts.append(self._generate_tree_view_detailed())
         parts.append("```")
         
         # All entry points
         if self.entrypoints:
-            parts.append("\n## Все точки входа")
+            parts.append("\n## All Entry Points")
             for ep in self.entrypoints:
                 ep_block = f"\n### {ep['path']}\n"
-                ep_block += f"- **Тип:** {ep['type']}\n"
-                ep_block += f"- **Язык:** {ep['language']}\n"
-                ep_block += f"- **Уверенность:** {ep['confidence']:.1%}\n"
-                ep_block += f"- **Описание:** {ep['description']}\n"
-                ep_block += f"- **Подписи:** {ep['signature']}\n"
-                ep_block += f"- **Ссылки:** {', '.join(ep['references'][:3])}\n"
+                ep_block += f"- **Type:** {ep['type']}\n"
+                ep_block += f"- **Language:** {ep['language']}\n"
+                ep_block += f"- **Confidence:** {ep['confidence']:.1%}\n"
+                ep_block += f"- **Description:** {ep['description']}\n"
+                ep_block += f"- **Signature:** {ep['signature']}\n"
+                ep_block += f"- **References:** {', '.join(ep['references'][:3])}\n"
                 
                 if token_count + len(encoding.encode(ep_block)) <= max_tokens - 200:
                     parts.append(ep_block)
@@ -230,9 +230,9 @@ class NeuroMap:
         
         # Complete symbol index
         if self.symbols:
-            parts.append("\n## Полный индекс символов")
-            parts.append("\n| Символ | Тип | Файл | Строки | Документация |")
-            parts.append("|--------|-----|------|--------|--------------|")
+            parts.append("\n## Complete Symbol Index")
+            parts.append("\n| Symbol | Type | File | Lines | Documentation |")
+            parts.append("|--------|------|------|-------|---------------|")
             
             for sym in self.symbols:
                 doc_preview = sym.docstring[:50] + "..." if sym.docstring and len(sym.docstring) > 50 else (sym.docstring or "")
@@ -244,14 +244,14 @@ class NeuroMap:
         
         # Complete dependency graph
         if self.dependencies:
-            parts.append("\n## Полный граф зависимостей")
+            parts.append("\n## Complete Dependency Graph")
             dep_groups = {}
             for dep in self.dependencies:
                 if dep.type not in dep_groups:
                     dep_groups[dep.type] = []
                 dep_groups[dep.type].append((dep.source, dep.target))
             
-            parts.append("\n### Визуализация зависимостей")
+            parts.append("\n### Dependency Visualization")
             parts.append("```mermaid")
             parts.append("graph TD")
             for dep_type, deps in dep_groups.items():
@@ -263,10 +263,10 @@ class NeuroMap:
             parts.append("```")
             
             # Detailed dependency analysis
-            parts.append("\n### Анализ зависимостей")
+            parts.append("\n### Dependency Analysis")
             circular_deps = self._find_circular_dependencies()
             if circular_deps:
-                parts.append(f"**Обнаружены циклические зависимости:** {len(circular_deps)}")
+                parts.append(f"**Circular dependencies detected:** {len(circular_deps)}")
                 for dep in circular_deps[:5]:
                     parts.append(f"- `{dep['source']}` -> `{dep['target']}`")
         
@@ -294,15 +294,15 @@ class NeuroMap:
         
         # Add important files
         for file_info in important_files:
-            lines.append(f"  └── ★ {file_info.name} ({file_info.lines} строк)")
+            lines.append(f"  └── ★ {file_info.name} ({file_info.lines} lines)")
         
         # Add other files
         for file_info in other_files[:5]:
-            lines.append(f"  └── {file_info.name} ({file_info.lines} строк)")
+            lines.append(f"  └── {file_info.name} ({file_info.lines} lines)")
         
         # Add directories
         if self.project_info.directories:
-            lines.append("  📁 ... (другие каталоги)")
+            lines.append("  📁 ... (other directories)")
         
         return "\n".join(lines)
 
@@ -314,20 +314,20 @@ class NeuroMap:
         
         # Add root with metadata
         lines.append(f"{self.project_info.name}/")
-        lines.append(f"  📝 pyproject.toml  — Конфигурация проекта")
-        lines.append(f"  📚 README.md  — Документация проекта")
+        lines.append(f"  📝 pyproject.toml  — Project Configuration")
+        lines.append(f"  📚 README.md  — Project Documentation")
         
         # Add important directories
         if "src" in self.project_info.directories:
-            lines.append(f"  📁 src/  — Исходный код")
-            lines.append(f"    ├── main.py  — Точка входа")
-            lines.append(f"    ├── api/  — API интерфейс")
-            lines.append(f"    ├── models/  — Модели данных")
-            lines.append(f"    └── utils/  — Вспомогательные функции")
+            lines.append(f"  📁 src/  — Source Code")
+            lines.append(f"    ├── main.py  — Entry Point")
+            lines.append(f"    ├── api/  — API Interface")
+            lines.append(f"    ├── models/  — Data Models")
+            lines.append(f"    └── utils/  — Utility Functions")
         
         if "tests" in self.project_info.directories:
-            lines.append(f"  📁 tests/  — Тесты")
-            lines.append(f"    └── test_main.py  — Тесты основной функциональности")
+            lines.append(f"  📁 tests/  — Tests")
+            lines.append(f"    └── test_main.py  — Core Functionality Tests")
         
         # Add remaining directories
         for directory in self.project_info.directories:
@@ -344,7 +344,7 @@ class NeuroMap:
         for file_info in important_files[:10]:
             importance = get_file_importance(file_info)
             marker = " ★" if importance > 0.7 else ""
-            lines.append(f"  └──{marker} {file_info.name} ({file_info.lines} строк)")
+            lines.append(f"  └──{marker} {file_info.name} ({file_info.lines} lines)")
         
         return "\n".join(lines)
 
@@ -419,7 +419,7 @@ def detect_patterns(project_info: ProjectInfo, symbols: List[SymbolInfo]) -> Dic
     """
     patterns = {
         "architecture": [],
-        "paradigm": "Не определена",
+        "paradigm": "Not defined",
         "frameworks": [],
         "databases": [],
     }
@@ -430,7 +430,7 @@ def detect_patterns(project_info: ProjectInfo, symbols: List[SymbolInfo]) -> Dic
             patterns["architecture"].append("MVC")
     
     if "src" in project_info.directories and "tests" in project_info.directories:
-        patterns["architecture"].append("Тестовый стек")
+        patterns["architecture"].append("Test stack")
     
     # Detect frameworks from files
     for file_info in project_info.files:

@@ -22,10 +22,10 @@ def format_markdown(neuromap, max_tokens: int = 1000) -> str:
     # Basic info from summary
     summary = neuromap.get_summary()
     info_lines = [
-        f"\n**Языки:** {', '.join(neuromap.project_info.language_stats.keys()) if neuromap.project_info.language_stats else 'Не определено'}",
-        f"**Всего файлов:** {neuromap.project_info.total_files}",
-        f"**Всего строк кода:** {neuromap.project_info.total_lines}",
-        f"**Каталогов:** {len(neuromap.project_info.directories)}",
+        f"\n**Languages:** {', '.join(neuromap.project_info.language_stats.keys()) if neuromap.project_info.language_stats else 'Not defined'}",
+        f"**Total files:** {neuromap.project_info.total_files}",
+        f"**Total lines of code:** {neuromap.project_info.total_lines}",
+        f"**Directories:** {len(neuromap.project_info.directories)}",
     ]
     
     for line in info_lines:

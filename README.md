@@ -1,102 +1,102 @@
-# NeuroMap — ИИ-оптимизированные карты проектов для понимания крупных кодовых баз
+# NeuroMap — AI-Optimized Project Maps for Understanding Large Codebases
 
-[![Build](https://img.shields.io/github/actions/workflow/status/neuromap-ai/neuromap/test.yml)](https://github.com/neuromap-ai/neuromap/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/RainCherb/NeuroMap/test.yml)](https://github.com/RainCherb/NeuroMap/actions)
 [![Python](https://img.shields.io/pypi/pyversions/neuro-map.svg)](https://pypi.org/project/neuro-map)
-[![License](https://img.shields.io/github/license/neuromap-ai/neuromap.svg)](https://github.com/neuromap-ai/neuromap/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/RainCherb/NeuroMap.svg)](https://github.com/RainCherb/NeuroMap/blob/main/LICENSE)
 
-## О проекте
+## About
 
-Когда кодовая база становится очень большой и в ней много файлов, ИИ-модели начинают тупить и путаться. **NeuroMap** создает подробную карту проекта, которую легко прочитает нейросеть даже с небольшим количеством контекста.
+When codebases become very large with many files, AI models start to get confused and lost. **NeuroMap** creates a detailed project map that an AI can easily read even with a small amount of context.
 
-Он разжёвывает для нейросети всё так, чтобы она начала понимать суть и структуру проекта.
+It breaks down everything for the AI so it can start understanding the essence and structure of the project.
 
-## Установка
+## Installation
 
 ```bash
 pip install neuromap
 ```
 
-Или с dev-зависимостями:
+Or with dev dependencies:
 
 ```bash
 pip install neuromap[dev]
 ```
 
-## Быстрый старт
+## Quick Start
 
-### Создание карты
+### Creating a Map
 
 ```bash
-# Быстрая компактная карта (~500 токенов)
+# Quick compact map (~500 tokens)
 neuromap scan ./my-project
 
-# Стандартная карта с лимитом токенов
+# Standard map with token limit
 neuromap scan ./my-project --level standard --max-tokens 2000
 
-# Полная детальная карта в JSON
+# Full detailed map in JSON
 neuromap scan ./my-project --level detailed --format json -o ai_context.json
 ```
 
-### Примеры использования
+### Usage Examples
 
-#### 1. Компактная карта для общего понимания
+#### 1. Compact Map for General Understanding
 
 ```bash
 neuromap scan ./my-project --level compact --format markdown
 ```
 
-Вывод (пример):
+Output (example):
 ```markdown
 # my-project
 
-**Языки:** Python 3.11
-**Всего файлов:** 42
-**Кодовых строк:** 1578
-**Каталогов:** 7
+**Languages:** Python 3.11
+**Total files:** 42
+**Code lines:** 1578
+**Directories:** 7
 
 ## Entry Points
-- `src/main.py`: Основная точка входа приложения
-- `src/api/router.py`: REST API роутер
+- `src/main.py`: Main application entry point
+- `src/api/router.py`: REST API router
 
 ## Key Symbols
-- `Engine.process` в engine.py (function)
-- `UserModel` в models.py (class)
+- `Engine.process` in engine.py (function)
+- `UserModel` in models.py (class)
 ```
 
-#### 2. Стандартная карта для разработки
+#### 2. Standard Map for Development
 
 ```bash
 neuromap scan ./my-project --level standard --format json > project_context.json
 ```
 
-#### 3. Детальная карта для знакомства с архитектурой
+#### 3. Detailed Map for Architecture Overview
 
 ```bash
 neuromap scan ./my-project --level detailed --format markdown --output PROJECT_MAP.md
 ```
 
-Вывод содержит:
-- Полный файл с деревом с аннотациями
-- Индекс всех символов с сигнатурами
-- Визуализацию зависимостей
-- Архитектурный анализ
+Output contains:
+- Full annotated file tree
+- Complete symbol index with signatures
+- Dependency visualization
+- Architecture analysis
 
-## Форматы вывода
+## Output Formats
 
 ### Markdown
-Идеально читается людьми и ИИ. Содержит структурированную информацию о проекте.
+Perfectly readable by both humans and AI. Contains structured project information.
 
 ### JSON
-Машиночитаемый формат, идеально подходит для построения инструментов на основе NeuroMap.
+Machine-readable format, perfect for building tools on top of NeuroMap.
 
 ### XML
-Стандартизированный формат для системных промптов и интеграции с другими инструментами.
+Standardized format for system prompts and integration with other tools.
 
-## Настройка
+## Configuration
 
-### Конфигурационный файл
+### Configuration File
 
-Создайте `.neuromap/config.json`:
+Create `.neuromap/config.json`:
 
 ```json
 {
@@ -114,14 +114,14 @@ neuromap scan ./my-project --level detailed --format markdown --output PROJECT_M
 }
 ```
 
-### Пользовательский конфиг через CLI
+### Custom Config via CLI
 
 ```bash
 neuromap config set default_level standard
 neuromap config set default_max_tokens 2000
 ```
 
-## Поддерживаемые языки
+## Supported Languages
 
 - **Python** (3.11+)
 - **JavaScript / TypeScript** (ES6+)
@@ -134,62 +134,62 @@ neuromap config set default_max_tokens 2000
 - **Swift**
 - **Kotlin**
 
-## Архитектурные детекторы
+## Architecture Detectors
 
 ### Entry Points
-- **Main** — Основная точка входа (`main()`)
-- **API** — REST API эндпоинты (FastAPI, Django, Spring)
-- **CLI** — Командная строка (Click, Typer)
-- **Worker** — Фоновые задачи (Celery, Daphne)
+- **Main** — Main entry point (`main()`)
+- **API** — REST API endpoints (FastAPI, Django, Spring)
+- **CLI** — Command line interface (Click, Typer)
+- **Worker** — Background tasks (Celery, Daphne)
 
-### Фреймворки
-- **FastAPI** — Современные API
-- **Django** / **DRF** — Классические веб-фреймворки
-- **Spring** — Java экосистема
-- **React** — Фронтенд (через JSX парсеры)
+### Frameworks
+- **FastAPI** — Modern APIs
+- **Django** / **DRF** — Classic web frameworks
+- **Spring** — Java ecosystem
+- **React** — Frontend (via JSX parsers)
 
-### Паттерны
-- **MVC** — Модель-Представление-Контроллер
-- **Clean Architecture** — Слои ответственности
-- **Microservices** — Визуализация сервисов
-- **Monolithic** — Единая структура приложения
+### Patterns
+- **MVC** — Model-View-Controller
+- **Clean Architecture** — Layered responsibilities
+- **Microservices** — Service visualization
+- **Monolithic** — Single application structure
 
-## Технологии
+## Technologies
 
-- **Typer** — Современный CLI фреймворк
-- **Rich** — Красивый терминал вывод
-- **Tree-sitter** — Парсинг кода (интеграция в процессе)
-- **NetworkX** — Граф зависимостей
-- **Tiktoken** — Подсчёт токенов
-- **Pydantic** — Валидация данных
+- **Typer** — Modern CLI framework
+- **Rich** — Beautiful terminal output
+- **Tree-sitter** — Code parsing (integration in progress)
+- **NetworkX** — Dependency graph
+- **Tiktoken** — Token counting
+- **Pydantic** — Data validation
 
-## Бэкенд нейронных сетей (будущие планы)
+## AI Backend (Future Plans)
 
-NeuroMap может быть расширен следующими модулями:
+NeuroMap can be extended with the following modules:
 
-1. **Графовые нейронные сети** — Анализ архитектуры
-2. **Code2Query** — Генерация запросов к ИИ
-3. **PatternLearner** — Обучение на архитектурных шаблонах
-4. **ImpactAnalyzer** — Анализ влияния изменений
+1. **Graph Neural Networks** — Architecture analysis
+2. **Code2Query** — AI query generation
+3. **PatternLearner** — Learning from architectural patterns
+4. **ImpactAnalyzer** — Change impact analysis
 
-## Лицензия
+## License
 
 MIT
 
-## КОНТРИБУЦИИ
+## Contributing
 
-Мы приветствуем вклады в проект! Пожалуйста, ознакомьтесь с [инструкциями по вкладу](./CONTRIBUTING.md) перед отправкой pull request.
+We welcome contributions! Please read the [contributing guidelines](./CONTRIBUTING.md) before submitting a pull request.
 
-## Связь
+## Contact
 
 - Discord: [neuromap.ai/discord](https://neuromap.ai/discord)
 - Twitter: [@neuromap_ai](https://twitter.com/neuromap_ai)
-- GitHub: [neuromap-ai/neuromap](https://github.com/neuromap-ai/neuromap)
+- GitHub: [RainCherb/NeuroMap](https://github.com/RainCherb/NeuroMap)
 
-## Примечания
+## Notes
 
-В этом проекте используется:
-- `tree-sitter` для парсинга кода (будет добавлено в следующей версии)
-- `NetworkX` для построения графа зависимостей
-- `Tiktoken` для точного подсчёта токенов
-- `Pydantic` для валидации конфигурации
+This project uses:
+- `tree-sitter` for code parsing (to be added in the next version)
+- `NetworkX` for building dependency graphs
+- `Tiktoken` for accurate token counting
+- `Pydantic` for configuration validation

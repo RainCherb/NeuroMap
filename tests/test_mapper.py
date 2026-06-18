@@ -14,11 +14,11 @@ from neuromap.mapper import scan_and_map, NeuroMap
 
 
 def test_neuromap_creation():
-    """Тестирование создания NeuroMap."""
+    """Test NeuroMap creation."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         
-        # Создать простой тестовый проект
+        # Create a simple test project
         (temp_path / "main.py").write_text("def main():\n    print('Hello')\n")
         (temp_path / "utils.py").write_text("def helper():\n    return 'helper'\n")
         (temp_path / "README.md").write_text("# Test Project")
@@ -32,7 +32,7 @@ def test_neuromap_creation():
 
 
 def test_neuromap_summary():
-    """Тестирование получения сводки проекта."""
+    """Test project summary generation."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         
@@ -54,12 +54,12 @@ def test_neuromap_summary():
 
 
 def test_markdown_compact_format():
-    """Тестирование компактного Markdown формата."""
+    """Test compact Markdown format."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         
         (temp_path / "main.py").write_text("def main():\n    print('Hello')\n")
-        (temp_path / "README.md").write_text("# Test Project\n\nОписание проекта.")
+        (temp_path / "README.md").write_text("# Test Project\n\nProject description.")
         
         neuromap = scan_and_map(temp_path)
         md_output = neuromap.generate_markdown_compact(max_tokens=1000)
@@ -68,24 +68,24 @@ def test_markdown_compact_format():
         assert len(md_output) > 0
         assert temp_path.name in md_output
         
-        # Проверить, что содержит базовую информацию
-        assert "Языки:" in md_output
-        assert "Всего файлов:" in md_output
+        # Check that it contains basic information
+        assert "Languages:" in md_output
+        assert "Total files:" in md_output
         
-        # Проверить токен-бюджет
+        # Check token budget
         encoding = tiktoken.get_encoding("cl100k_base")
         token_count = len(encoding.encode(md_output))
         assert token_count <= 1000
 
 
 def test_markdown_standard_format():
-    """Тестирование стандартного Markdown формата."""
+    """Test standard Markdown format."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         
         (temp_path / "main.py").write_text("""
 def main():
-    '''Основная точка входа.'''
+    '''Main entry point.'''
     print("Hello")
 """)
         
@@ -96,17 +96,17 @@ def main():
         assert len(md_output) > 0
         assert temp_path.name in md_output
         
-        # Проверить наличие структуры
-        assert "## Файлы" in md_output
+        # Check for structure
+        assert "## Files" in md_output
         
-        # Проверить токен-бюджет
+        # Check token budget
         encoding = tiktoken.get_encoding("cl100k_base")
         token_count = len(encoding.encode(md_output))
         assert token_count <= 2000
 
 
 def test_markdown_detailed_format():
-    """Тестирование детального Markdown формата."""
+    """Test detailed Markdown format."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         
@@ -115,7 +115,7 @@ import os
 from pathlib import Path
 
 def main():
-    '''Основная точка входа.'''
+    '''Main entry point.'''
     print("Hello")
     return Path(".")
 """)
@@ -127,17 +127,17 @@ def main():
         assert len(md_output) > 0
         assert temp_path.name in md_output
         
-        # Проверить наличие продвинутых функций
-        assert "## Архитектурный анализ" in md_output
+        # Check for advanced features
+        assert "## Architecture Analysis" in md_output
         
-        # Проверить токен-бюджет
+        # Check token budget
         encoding = tiktoken.get_encoding("cl100k_base")
         token_count = len(encoding.encode(md_output))
         assert token_count <= 5000
 
 
 def test_json_format():
-    """Тестирование JSON формата."""
+    """Test JSON format."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         
@@ -146,7 +146,7 @@ def test_json_format():
         
         neuromap = scan_and_map(temp_path)
         
-        # Получить сводку и преобразовать в JSON
+        # Get summary and convert to JSON
         summary = neuromap.get_summary()
         json_output = json.dumps(summary, indent=2, ensure_ascii=False)
         
@@ -159,7 +159,7 @@ def test_json_format():
 
 
 def test_xml_format():
-    """Тестирование XML формата."""
+    """Test XML format."""
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         
@@ -169,7 +169,7 @@ def test_xml_format():
         neuromap = scan_and_map(temp_path)
         summary = neuromap.get_summary()
         
-        # Создать простой XML представление
+        # Create a simple XML representation
         xml_parts = []
         xml_parts.append('<?xml version="1.0" encoding="UTF-8"?>')
         xml_parts.append('<project_map>')

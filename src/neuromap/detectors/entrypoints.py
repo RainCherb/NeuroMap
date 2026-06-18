@@ -201,9 +201,9 @@ class EntrypointDetector:
         Get description for entry point type.
         """
         descriptions = {
-            "main": "Основная точка входа приложения",
-            "api": "REST API эндпоинт",
-            "cli": "CLI интерфейс командной строки",
-            "worker": "Обработчик фоновых задач",
+            "main": "Main application entry point",
+            "api": "REST API endpoint",
+            "cli": "CLI command-line interface",
+            "worker": "Background task handler",
         }
-        return descriptions.get(entry_type, "Точка входа")
+        return descriptions.get(entry_type, "Entry point")

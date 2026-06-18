@@ -22,7 +22,7 @@ def scan(
     from neuromap import __version__
     from .mapper import scan_and_map
 
-    console.print(f"📍 Scanning {path}...")
+    console.print(f"Scanning {path}...")
     console.print(f"   Level: {level}")
     console.print(f"   Max tokens: {max_tokens}")
     console.print(f"   Format: {format}")
@@ -38,7 +38,7 @@ def scan(
         elif level == "detailed":
             output_content = neuromap.generate_markdown_detailed(max_tokens)
         else:
-            console.print(f"[red]❌ Unknown level: {level}[/red]")
+            console.print(f"[red]Unknown level: {level}[/red]")
             return
     elif format == "json":
         import json
@@ -57,12 +57,12 @@ def scan(
                 output_content += f"    <{key}>{value}</{key}>\n"
         output_content += "  </project>\n</project_map>"
     else:
-        console.print(f"[red]❌ Unknown format: {format}[/red]")
+        console.print(f"[red]Unknown format: {format}[/red]")
         return
 
     if output:
         Path(output).write_text(output_content)
-        console.print(f"[green]✓ Saved to {output}[/green]")
+        console.print(f"[green]Saved to {output}[/green]")
     else:
         console.print(output_content)
 
