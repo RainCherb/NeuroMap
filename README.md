@@ -35,6 +35,9 @@ neuromap scan ./my-project --level standard --max-tokens 2000
 
 # Full detailed map in JSON
 neuromap scan ./my-project --level detailed --format json -o ai_context.json
+
+# CLAUDE.md context file for Claude Code
+neuromap scan ./my-project --format claude
 ```
 
 ### Usage Examples
@@ -91,6 +94,20 @@ Machine-readable format, perfect for building tools on top of NeuroMap.
 
 ### XML
 Standardized format for system prompts and integration with other tools.
+
+### Claude (`CLAUDE.md`)
+Generates a `CLAUDE.md` project-context file for **Claude Code**, which
+automatically reads it from the project root as background context. It
+front-loads the essentials Claude needs to orient itself: tech stack, entry
+points, key files, and architecture — all within the token budget.
+
+```bash
+# Writes CLAUDE.md into the project root (where Claude Code looks for it)
+neuromap scan ./my-project --format claude
+
+# Or to a custom path
+neuromap scan ./my-project --format claude -o docs/CLAUDE.md
+```
 
 ## Configuration
 

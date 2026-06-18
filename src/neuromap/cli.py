@@ -13,7 +13,7 @@ def scan(
     path: str = typer.Argument(..., help="Path to the project"),
     level: str = typer.Option("compact", help="Depth level: compact, standard, detailed"),
     max_tokens: int = typer.Option(1000, help="Max tokens for output"),
-    format: str = typer.Option("markdown", help="Output format: markdown, json, xml"),
+    format: str = typer.Option("markdown", help="Output format: markdown, json, xml, claude"),
     output: str | None = typer.Option(None, help="Output file"),
 ):
     """
@@ -26,7 +26,10 @@ def scan(
     console.print(f"   Level: {level}")
     console.print(f"   Max tokens: {max_tokens}")
     console.print(f"   Format: {format}")
-    console.print(f"   Output: {output or 'stdout'}")
+    # For `claude` without an explicit --output, the map is written to
+    # {path}/CLAUDE.md by default (shown below), so reflect that here.
+    default_claude_path = str(Path(path) / "CLAUDE.md") if format == "claude" else None
+    console.print(f"   Output: {output or default_claude_path or 'stdout'}")
 
     neuromap = scan_and_map(Path(path), level=level)
     
@@ -56,6 +59,13 @@ def scan(
             else:
                 output_content += f"    <{key}>{value}</{key}>\n"
         output_content += "  </project>\n</project_map>"
+    elif format == "claude":
+        # Generate CLAUDE.md, the context file Claude Code auto-reads from
+        # the project root. Default to writing it there so Claude Code picks
+        # it up without extra steps; --output overrides the path.
+        output_content = neuromap.generate_claude(max_tokens)
+        if not output:
+            output = str(Path(path) / "CLAUDE.md")
     else:
         console.print(f"[red]Unknown format: {format}[/red]")
         return
