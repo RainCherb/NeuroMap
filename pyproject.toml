@@ -1,0 +1,82 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "neuromap"
+version = "0.1.0"
+authors = [
+    {name = "NeuroMap Team", email = "team@neuromap.ai"}
+]
+description = "AI-optimized project maps for understanding large codebases"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "typer >= 0.9.0",
+    "rich >= 13.0.0",
+    "tiktoken >= 0.5.0",
+    "networkx >= 3.0.0",
+    "pyyaml >= 6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest >= 7.0.0",
+    "ruff >= 0.4.0",
+    "black >= 23.0.0",
+    "mypy >= 1.0.0",
+]
+
+[project.scripts]
+neuromap = "neuromap.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/neuromap-ai/neuromap"
+Repository = "https://github.com/neuromap-ai/neuromap"
+Issues = "https://github.com/neuromap-ai/neuromap/issues"
+
+[tool.hatch.build]
+include = ["src/neuromap/"]
+exclude = ["tests/*"]
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "I"]
+ignore = ["E203", "W503"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.black]
+line-length = 88
+target-version = 'py311'
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
