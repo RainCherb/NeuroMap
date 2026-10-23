@@ -1,212 +1,73 @@
-# NeuroMap — AI-Optimized Project Maps for Understanding Large Codebases
+# NeuroMap — карта кодовой базы для AI-агентов
 
-[![Build](https://img.shields.io/github/actions/workflow/status/RainCherb/NeuroMap/test.yml)](https://github.com/RainCherb/NeuroMap/actions)
-[![Python](https://img.shields.io/pypi/pyversions/neuro-map.svg)](https://pypi.org/project/neuro-map)
-[![License](https://img.shields.io/github/license/RainCherb/NeuroMap.svg)](https://github.com/RainCherb/NeuroMap/blob/main/LICENSE)
+**Инструмент для подготовки компактного описания проекта, которое можно передать Claude Code и другим AI coding agents.**
 
-## About
+Когда приложение разрастается, ИИ-агенту приходится тратить контекст на изучение структуры репозитория. NeuroMap сканирует файлы проекта, собирает сведения о структуре, языках, точках входа и доступных символах и экспортирует карту в удобном формате.
 
-When codebases become very large with many files, AI models start to get confused and lost. **NeuroMap** creates a detailed project map that an AI can easily read even with a small amount of context.
+**Практическое применение:** ускорение знакомства нового агента с проектом, формирование исходного контекста для доработок и уменьшение ручного копирования файлов в чат.
 
-It breaks down everything for the AI so it can start understanding the essence and structure of the project.
+## Возможности
 
-## Installation
+- Сканирование структуры каталога и определение типов исходных файлов.
+- Сводка по проекту: файлы, языки, точки входа и символы, выявленные анализатором.
+- Три уровня Markdown-представления: compact, standard, detailed.
+- Вывод в Markdown, JSON, XML и специальный формат `CLAUDE.md`.
+- Ограничение объёма Markdown-карты параметром `--max-tokens`.
+- CLI на Python (Typer), без необходимости подключать платную LLM API.
+
+Точность детализации зависит от языка и возможностей встроенных анализаторов. Это инструмент структурного анализа, а не полноценная IDE или семантический индекс всех зависимостей.
+
+## Установка из исходного кода
+
+Требуется Python 3.11+.
 
 ```bash
-pip install neuromap
+git clone https://github.com/RainCherb/NeuroMap.git
+cd NeuroMap
+python -m pip install -e .
 ```
 
-Or with dev dependencies:
+## Примеры команд
+
+Базовая компактная карта:
 
 ```bash
-pip install neuromap[dev]
-```
-
-## Quick Start
-
-### Creating a Map
-
-```bash
-# Quick compact map (~500 tokens)
 neuromap scan ./my-project
+```
 
-# Standard map with token limit
+Стандартная Markdown-карта с бюджетом токенов:
+
+```bash
 neuromap scan ./my-project --level standard --max-tokens 2000
+```
 
-# Full detailed map in JSON
-neuromap scan ./my-project --level detailed --format json -o ai_context.json
+JSON-отчёт в файл:
 
-# CLAUDE.md context file for Claude Code
+```bash
+neuromap scan ./my-project --format json --output project-map.json
+```
+
+Контекст проекта для Claude Code (создаёт `CLAUDE.md` в указанном проекте):
+
+```bash
 neuromap scan ./my-project --format claude
 ```
 
-### Usage Examples
-
-#### 1. Compact Map for General Understanding
+Узнать версию:
 
 ```bash
-neuromap scan ./my-project --level compact --format markdown
+neuromap version
 ```
 
-Output (example):
-```markdown
-# my-project
-
-**Languages:** Python 3.11
-**Total files:** 42
-**Code lines:** 1578
-**Directories:** 7
-
-## Entry Points
-- `src/main.py`: Main application entry point
-- `src/api/router.py`: REST API router
-
-## Key Symbols
-- `Engine.process` in engine.py (function)
-- `UserModel` in models.py (class)
-```
-
-#### 2. Standard Map for Development
+## Проверка проекта
 
 ```bash
-neuromap scan ./my-project --level standard --format json > project_context.json
+python -m pip install -e ".[dev]"
+python -m pytest tests
 ```
 
-#### 3. Detailed Map for Architecture Overview
+## Технологии и применение
 
-```bash
-neuromap scan ./my-project --level detailed --format markdown --output PROJECT_MAP.md
-```
+Python, Typer, Rich, tiktoken, сканирование исходников, анализ структуры кодовой базы, context engineering, AI-assisted development.
 
-Output contains:
-- Full annotated file tree
-- Complete symbol index with signatures
-- Dependency visualization
-- Architecture analysis
-
-## Output Formats
-
-### Markdown
-Perfectly readable by both humans and AI. Contains structured project information.
-
-### JSON
-Machine-readable format, perfect for building tools on top of NeuroMap.
-
-### XML
-Standardized format for system prompts and integration with other tools.
-
-### Claude (`CLAUDE.md`)
-Generates a `CLAUDE.md` project-context file for **Claude Code**, which
-automatically reads it from the project root as background context. It
-front-loads the essentials Claude needs to orient itself: tech stack, entry
-points, key files, and architecture — all within the token budget.
-
-```bash
-# Writes CLAUDE.md into the project root (where Claude Code looks for it)
-neuromap scan ./my-project --format claude
-
-# Or to a custom path
-neuromap scan ./my-project --format claude -o docs/CLAUDE.md
-```
-
-## Configuration
-
-### Configuration File
-
-Create `.neuromap/config.json`:
-
-```json
-{
-  "default_level": "compact",
-  "default_max_tokens": 1000,
-  "default_format": "markdown",
-  "exclude_patterns": ["*.test.*", "__pycache__", ".git"],
-  "include_patterns": [],
-  "entrypoints": {
-    "detect_main": true,
-    "detect_api": true,
-    "detect_cli": true,
-    "detect_worker": true
-  }
-}
-```
-
-### Custom Config via CLI
-
-```bash
-neuromap config set default_level standard
-neuromap config set default_max_tokens 2000
-```
-
-## Supported Languages
-
-- **Python** (3.11+)
-- **JavaScript / TypeScript** (ES6+)
-- **Java** (8+)
-- **C / C++**
-- **Rust**
-- **Go**
-- **PHP**
-- **Ruby**
-- **Swift**
-- **Kotlin**
-
-## Architecture Detectors
-
-### Entry Points
-- **Main** — Main entry point (`main()`)
-- **API** — REST API endpoints (FastAPI, Django, Spring)
-- **CLI** — Command line interface (Click, Typer)
-- **Worker** — Background tasks (Celery, Daphne)
-
-### Frameworks
-- **FastAPI** — Modern APIs
-- **Django** / **DRF** — Classic web frameworks
-- **Spring** — Java ecosystem
-- **React** — Frontend (via JSX parsers)
-
-### Patterns
-- **MVC** — Model-View-Controller
-- **Clean Architecture** — Layered responsibilities
-- **Microservices** — Service visualization
-- **Monolithic** — Single application structure
-
-## Technologies
-
-- **Typer** — Modern CLI framework
-- **Rich** — Beautiful terminal output
-- **Tree-sitter** — Code parsing (integration in progress)
-- **NetworkX** — Dependency graph
-- **Tiktoken** — Token counting
-- **Pydantic** — Data validation
-
-## AI Backend (Future Plans)
-
-NeuroMap can be extended with the following modules:
-
-1. **Graph Neural Networks** — Architecture analysis
-2. **Code2Query** — AI query generation
-3. **PatternLearner** — Learning from architectural patterns
-4. **ImpactAnalyzer** — Change impact analysis
-
-## License
-
-MIT
-
-## Contributing
-
-We welcome contributions! Please read the [contributing guidelines](./CONTRIBUTING.md) before submitting a pull request.
-
-## Contact
-
-- Discord: [neuromap.ai/discord](https://neuromap.ai/discord)
-- Twitter: [@neuromap_ai](https://twitter.com/neuromap_ai)
-- GitHub: [RainCherb/NeuroMap](https://github.com/RainCherb/NeuroMap)
-
-## Notes
-
-This project uses:
-- `tree-sitter` for code parsing (to be added in the next version)
-- `NetworkX` for building dependency graphs
-- `Tiktoken` for accurate token counting
-- `Pydantic` for configuration validation
+**Статус:** самостоятельный проект / прототип; прежде чем использовать на критичной кодовой базе, проверьте качество генерируемой карты на своём репозитории.
